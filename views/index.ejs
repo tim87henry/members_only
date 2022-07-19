@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <% if (messages) { messages.forEach(message => { %>
+      <h3><%= message.title %> </h3>
+      <h5><%= message.text %> </h5>
+    <% })} %>
+  </body>
+</html>
