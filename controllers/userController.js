@@ -1,5 +1,35 @@
 var User = require('../models/user');
 const {body, validationResult, check} = require('express-validator');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const session = require("express-session");
+
+passport.use(
+  new LocalStrategy((username, password, done) => {
+    User.findOne({ username: username }, (err, user) => {
+      if (err) { 
+        return done(err);
+      }
+      if (!user) {
+        return done(null, false, { message: "Incorrect username" });
+      }
+      if (user.password !== password) {
+        return done(null, false, { message: "Incorrect password" });
+      }
+      return done(null, user);
+    });
+  })
+);
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
 
 exports.user_create_get = function(req, res, next) {
     res.render('sign_up');
@@ -39,6 +69,15 @@ exports.user_create_post = [
             })
         }
 }]
+
+exports.user_sign_in_get = function(req, res, next) {
+    res.render('sign_in')
+}
+
+exports.user_sign_in_post = passport.authenticate("local",{
+    successRedirect: "/",
+    failureRedirect: "/"
+});
 
 exports.user_join_get = function(req, res, next) {
     res.send("User becomes a member get")

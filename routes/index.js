@@ -12,6 +12,8 @@ router.post('/message/:id/delete', message_controller.message_delete_post);
 
 router.get('/user/sign_up', user_controller.user_create_get);
 router.post('/user/sign_up', user_controller.user_create_post);
+router.get('/sign_in', user_controller.user_sign_in_get);
+router.post('/sign_in', user_controller.user_sign_in_post);
 router.get('/user/:id/join', user_controller.user_join_get);
 router.post('/user/:id/join', user_controller.user_join_post);
 router.get('/user/:id/admin', user_controller.user_admin_get);
