@@ -6,6 +6,15 @@
   </head>
   <body>
     <h1><%= title %></h1>
+    <% if(user) { %>
+      <h3>Hello <%= user.first_name %></h3>
+      <% if(!user.is_member) { %>
+        <a href=<%= '/user/'+user.id+"/join" %>>Become a member</a><br>
+      <% } %>
+      <a href="/sign_out">Sign Out</a>
+    <% } else { %>
+      <a href="/sign_in">Sign In</a>
+    <% } %>
     <p>Welcome to <%= title %></p>
     <% if (messages) { messages.forEach(message => { %>
       <h3><%= message.title %> </h3>

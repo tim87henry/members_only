@@ -4,7 +4,7 @@ exports.index = function(req, res, next) {
     Message.find({})
     .exec(function(err, messages) {
         if (err) { return next(err) }
-        res.render('index', {title: "ClubHouse", messages: [{"title":"First post", "text":"First comment"},{"title":"Slow", "text":"Missed by an inch"}]})
+        res.render('index', {title: "ClubHouse", messages: [{"title":"First post", "text":"First comment"},{"title":"Slow", "text":"Missed by an inch"}], user: req.user})
     });
 }
 

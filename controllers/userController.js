@@ -3,6 +3,7 @@ const {body, validationResult, check} = require('express-validator');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const session = require("express-session");
+const bcrypt = require('bcryptjs');
 
 passport.use(
   new LocalStrategy((username, password, done) => {
@@ -13,10 +14,13 @@ passport.use(
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
       }
-      if (user.password !== password) {
-        return done(null, false, { message: "Incorrect password" });
-      }
-      return done(null, user);
+      bcrypt.compare(password, user.password, (err, res) => {
+        if (res) {
+          return done(null, user);
+        } else {
+          return done(null, false, { message: "Incorrect password" });
+        }
+      });
     });
   })
 );
@@ -51,24 +55,31 @@ exports.user_create_post = [
         if (!errors.isEmpty()) {
             res.render('sign_up', {errors: errors.array()});
         } else {
-            var user = new User(
-                {
-                    first_name: req.body.first_name,
-                    last_name: req.body.last_name,
-                    username: req.body.username,
-                    password: req.body.password,
-                    country: req.body.country,
-                    is_member: false,
-                    is_admin: false
+                 bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+                if (err) { 
+                    return next(err);
+                } else {
+                    var user = new User(
+                    {
+                        first_name: req.body.first_name,
+                        last_name: req.body.last_name,
+                        username: req.body.username,
+                        password: hashedPassword,
+                        country: req.body.country,
+                        is_member: false,
+                        is_admin: false
+                    }
+                    );
+        
+                    user.save(function(err) {
+                        if (err) { return next(err)}
+                        res.redirect('/')
+                    })
                 }
-            );
-    
-            user.save(function(err) {
-                if (err) { return next(err)}
-                res.redirect('/')
-            })
+            });
         }
-}]
+    }
+]
 
 exports.user_sign_in_get = function(req, res, next) {
     res.render('sign_in')
@@ -79,12 +90,30 @@ exports.user_sign_in_post = passport.authenticate("local",{
     failureRedirect: "/"
 });
 
+exports.user_sign_out = function(req, res, next) {
+  req.logout(function(err) {
+    if (err) { return next(err);}
+    res.redirect('/');
+  });
+}
+
 exports.user_join_get = function(req, res, next) {
-    res.send("User becomes a member get")
+    User.findById(req.params.id).exec(function(err, user) {
+        if (err) { return next(err); }
+        res.render('join_club', {error: ""})
+    })
 }
 
 exports.user_join_post = function(req, res, next) {
-    res.send("User becomes a member post")
+    if (req.body.password === 'forzamilan') {
+        User.update({_id: req.params.id},{
+            is_member: true
+        }, function(err, resp) {
+            res.redirect("/")
+        })
+    } else {
+        res.render('join_club', {error: "Wrong passcode. Not a member yet."})
+    }
 }
 
 exports.user_admin_get = function(req, res, next) {
