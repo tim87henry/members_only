@@ -98,10 +98,7 @@ exports.user_sign_out = function(req, res, next) {
 }
 
 exports.user_join_get = function(req, res, next) {
-    User.findById(req.params.id).exec(function(err, user) {
-        if (err) { return next(err); }
-        res.render('join_club', {error: ""})
-    })
+    res.render('join_club', {error: ""});
 }
 
 exports.user_join_post = function(req, res, next) {
@@ -109,6 +106,7 @@ exports.user_join_post = function(req, res, next) {
         User.update({_id: req.params.id},{
             is_member: true
         }, function(err, resp) {
+            if (err) { return next(err); }
             res.redirect("/")
         })
     } else {
@@ -117,9 +115,14 @@ exports.user_join_post = function(req, res, next) {
 }
 
 exports.user_admin_get = function(req, res, next) {
-    res.send("User becomes an admin get")
+    res.render('become_admin');
 }
 
 exports.user_admin_post = function(req, res, next) {
-    res.send("User becomes an admin post")
+    User.update({_id: req.params.id},{
+        is_admin: true
+    }, function(err, resp) {
+        if (err) { return next(err); }
+        res.redirect("/");
+    });
 }

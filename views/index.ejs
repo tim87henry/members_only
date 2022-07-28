@@ -8,8 +8,11 @@
     <h1><%= title %></h1>
     <% if(user) { %>
       <h3>Hello <%= user.first_name %></h3>
+      <a href='/message/create'>Add a message</a><br>
       <% if(!user.is_member) { %>
         <a href=<%= '/user/'+user.id+"/join" %>>Become a member</a><br>
+      <% } else if (!user.is_admin) { %>
+        <a href=<%= '/user/'+user.id+"/admin" %>>Become an admin</a><br>
       <% } %>
       <a href="/sign_out">Sign Out</a>
     <% } else { %>
@@ -18,7 +21,8 @@
     <p>Welcome to <%= title %></p>
     <% if (messages) { messages.forEach(message => { %>
       <h3><%= message.title %> </h3>
-      <h5><%= message.text %> </h5>
+        <h5><%= message.user %> </h5>
+      <h4><%= message.text %> </h4>
     <% })} %>
   </body>
 </html>
