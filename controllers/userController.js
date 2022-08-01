@@ -2,7 +2,6 @@ var User = require('../models/user');
 const {body, validationResult, check} = require('express-validator');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const session = require("express-session");
 const bcrypt = require('bcryptjs');
 
 passport.use(
@@ -44,8 +43,9 @@ exports.user_create_post = [
     body('last_name', 'Please enter last name').trim().isLength({ min: 1}).escape(),
     body('username', 'Please enter username').trim().isLength({ min: 1}).escape(),
     body('password', 'Please enter password').trim().isLength({ min: 1}).escape(),
+    check('password').exists(),
     check(
-        'custom_password',
+        'confirm_password',
         'Password confirmation field must have the same value as the password field',
     )
     .exists()
