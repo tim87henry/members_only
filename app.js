@@ -7,8 +7,11 @@ var mongoose = require('mongoose');
 const session = require("express-session");
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+require('dotenv').config();
 
-var mongoDB = 'mongodb+srv://admin:nimda@cluster0.sqmfnak.mongodb.net/clubhouse?retryWrites=true&w=majority';
+console.log("DOTENV  "+process.env.MONGODB_STRING)
+
+var mongoDB = process.env.MONGODB_STRING;
 mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true});
 var db = mongoose.connection;
 db.on('error',console.error.bind(console, "Mongo DB connection error"));
@@ -19,7 +22,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
+app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
