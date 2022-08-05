@@ -10,7 +10,7 @@ exports.index = function(req, res, next) {
 }
 
 exports.message_create_get = function(req, res, next) {
-    res.render('create_message');
+    res.render('create_message', {title: "Create a post"});
 }
 
 exports.message_create_post = function(req, res, next) {
@@ -32,7 +32,7 @@ exports.message_delete_get = function(req, res, next) {
     Message.findById(req.params.id)
     .exec(function(err, message) {
         if (err) { return next(err); }
-        res.render('delete_message', {message:message});
+        res.render('delete_message', {message:message, title: "Delete post"});
     })
 }
 

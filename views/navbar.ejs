@@ -1,0 +1,22 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+        <a class="navbar-brand" href="#">ClubHouse</a>
+        </div>
+        <ul class="nav navbar-nav">
+        <li class="<%= (title==='ClubHouse')?'active':undefined %>"><a href="/">Home</a></li>
+        <% if(currentUser) { %>
+            <li class="<%= (title==='Create a post')?'active':undefined %>"><a href='/message/create'>Add a message</a></li>
+            <% if(!currentUser.is_member) { %>
+            <li class="<%= (title==='Join Club')?'active':undefined %>"><a href=<%= '/user/'+currentUser.id+"/join" %>>Become a member</a></li>
+            <% } else if (!currentUser.is_admin) { %>
+            <li class="<%= (title==='Upgrade yourself')?'active':undefined %>"><a href=<%= '/user/'+currentUser.id+"/admin" %>>Become an admin</a></li>
+            <% } %>
+            <li><a href="/sign_out">Sign Out</a></li>
+        <% } else { %>
+            <li class="<%= (title==='Sign In')?'active':undefined %>"><a href="/sign_in">Sign In</a></li>
+            <li class="<%= (title==='Sign Up')?'active':undefined %>"><a href="/user/sign_up">Sign Up</a></li>
+        <% } %>
+        </ul>
+    </div>
+</nav>

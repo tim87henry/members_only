@@ -6,23 +6,7 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <nav class="navbar bg-light navbar-light navbar-expand-lg">
-      <span class="navbar-brand"><%= title %></span>
-      <% if(user) { %>
-        <h3>Hello <%= user.first_name %></h3>
-        <a href='/message/create'>Add a message</a><br>
-        <% if(!user.is_member) { %>
-          <a href=<%= '/user/'+user.id+"/join" %>>Become a member</a><br>
-        <% } else if (!user.is_admin) { %>
-          <a href=<%= '/user/'+user.id+"/admin" %>>Become an admin</a><br>
-        <% } %>
-        <a href="/sign_out">Sign Out</a>
-      <% } else { %>
-        <a href="/sign_in">Sign In</a>
-        <a href="/user/sign_up">Sign Up</a>
-      <% } %>
-    </nav>
-    <p>Welcome to <%= title %></p>
+    <%- include('navbar') -%>
     <% if (messages) { messages.forEach(message => { %>
       <br>
       <h3><%= message.title %> </h3>

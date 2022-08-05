@@ -35,7 +35,7 @@ passport.deserializeUser(function(id, done) {
 });
 
 exports.user_create_get = function(req, res, next) {
-    res.render('sign_up');
+    res.render('sign_up', {title: "Sign Up"});
 }
 
 exports.user_create_post = [
@@ -53,7 +53,7 @@ exports.user_create_post = [
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.render('sign_up', {errors: errors.array()});
+            res.render('sign_up', {errors: errors.array(), title: "Sign Up"});
         } else {
                  bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
                 if (err) { 
@@ -82,7 +82,7 @@ exports.user_create_post = [
 ]
 
 exports.user_sign_in_get = function(req, res, next) {
-    res.render('sign_in')
+    res.render('sign_in', {title: "Sign In"})
 }
 
 exports.user_sign_in_post = passport.authenticate("local",{
@@ -98,7 +98,7 @@ exports.user_sign_out = function(req, res, next) {
 }
 
 exports.user_join_get = function(req, res, next) {
-    res.render('join_club', {error: ""});
+    res.render('join_club', {error: "", title: "Join Club"});
 }
 
 exports.user_join_post = function(req, res, next) {
@@ -110,12 +110,12 @@ exports.user_join_post = function(req, res, next) {
             res.redirect("/")
         })
     } else {
-        res.render('join_club', {error: "Wrong passcode. Not a member yet."})
+        res.render('join_club', {error: "Wrong passcode. Not a member yet.", title: "Join Club"})
     }
 }
 
 exports.user_admin_get = function(req, res, next) {
-    res.render('become_admin');
+    res.render('become_admin', {title: "Upgrade yourself"});
 }
 
 exports.user_admin_post = function(req, res, next) {
