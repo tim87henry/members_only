@@ -42,18 +42,13 @@ exports.user_create_post = [
     body('first_name', 'Please enter first name').trim().isLength({ min: 1}).escape(),
     body('last_name', 'Please enter last name').trim().isLength({ min: 1}).escape(),
     body('username', 'Please enter username').trim().isLength({ min: 1}).escape(),
-    body('username', 'Username already taken').custom((value, { req }) => {
-      User.findOne({ username: value }, (err, user) => {
-      if (err) { 
-        throw new Error(err);
-      }
-      if (user) {
-        throw new Error('Username already exists');
-      } else {
-        return true;
-      }
-      })
-    }),
+    body('username', 'Username already taken').custom((value) => {
+      return User.findOne({ username: value }).then((user) => {
+        if (user) {
+          return Promise.reject('Username already in use.');
+        }
+      });
+    }).escape(),
     body('password', 'Please enter password').trim().isLength({ min: 1}).escape(),
     check('password').exists(),
     check(

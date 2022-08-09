@@ -1,0 +1,22 @@
+<% if (messages) { messages.forEach(message => { %>
+    <div class="card shadow mb-4 bg-white rounded">
+        <div class="card-header justify-content-between">
+            <h5 class="mb-0 float-left"><%= message.title %></h5>
+            <div class="float-right">
+                <% if(user && user.is_admin) { %>
+                    <a href=<%='/message/'+message.id+'/delete' %>>
+                        <button type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </a>
+                <% } %>
+            </div><br>
+        </div>
+        <div class="card-body">
+            <p class=" mb-0"><%= message.text %></p>
+            <% if(user && user.is_member) { %>
+                <footer class="blockquote-footer"><i><%= message.user.first_name %></i></footer>
+            <% } %>
+        </div>
+    </div>
+  <% })} %>

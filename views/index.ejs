@@ -3,20 +3,9 @@
   <head>
     <title><%= title %></title>
     <%- include('head') -%>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
     <%- include('navbar') -%>
-    <% if (messages) { messages.forEach(message => { %>
-      <br>
-      <h3><%= message.title %> </h3>
-      <% if(user && user.is_admin) { %>
-        <a href=<%='/message/'+message.id+'/delete' %>>Del</a>
-      <% } %>
-      <% if(user && user.is_member) { %>
-        <small><i><%= message.user.first_name %></i></small>
-      <% } %>
-      <h4><%= message.text %> </h4>
-    <% })} %>
+    <%- include('messages') -%>
   </body>
 </html>
