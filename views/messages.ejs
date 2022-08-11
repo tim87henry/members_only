@@ -15,7 +15,7 @@
         <div class="card-body">
             <p class=" mb-0"><%= message.text %></p>
             <% if(user && user.is_member) { %>
-                <footer class="blockquote-footer"><i><%= message.user.first_name %></i></footer>
+                <footer class="blockquote-footer"><i><%= message.user.first_name %>, <%= message.time.toDateString() %></i></footer>
             <% } %>
         </div>
     </div>
